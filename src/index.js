@@ -14,7 +14,7 @@ const NotesApp = () => {
     setBody("");
   };
 
-  const onRemove = title => {
+  const removeNote = title => {
     setNotes(notes.filter(note => note.title !== title));
   };
 
@@ -42,14 +42,27 @@ const NotesApp = () => {
       </form>
       <div>
         {notes.map(note => (
-          <div key={note.title}>
-            {note.title}
-            {note.body}
-            <button onClick={() => onRemove(note.title)}>x</button>
-            <br />
-          </div>
+          <Note key={note.title} note={note} removeNote={removeNote} />
         ))}
       </div>
+    </div>
+  );
+};
+
+const Note = ({ note, removeNote }) => {
+  useEffect(() => {
+    console.log("Note component mounted");
+
+    return () => {
+      console.log("Note component unmounted");
+    };
+  }, []);
+
+  return (
+    <div>
+      <h3>{note.title}</h3>
+      <p>{note.body}</p>
+      <button onClick={() => removeNote(note.title)}>x</button>
     </div>
   );
 };
