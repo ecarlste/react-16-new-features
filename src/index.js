@@ -1,28 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 
+const populateNotesAction = "POPULATE_NOTES";
+const addNoteAction = "ADD_NOTE";
+const removeNoteAction = "REMOVE_NOTE";
+
+const notesReducer = (state, action) => {
+  switch (action.type) {
+    case populateNotesAction:
+      return action.notes;
+    case addNoteAction:
+      return [...state, action.note];
+    case removeNoteAction:
+      return state.filter(note => note.title !== action.title);
+    default:
+      return state;
+  }
+};
+
 const NotesApp = () => {
-  const [notes, setNotes] = useState([]);
+  const [notes, dispatch] = useReducer(notesReducer, []);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
   const onSubmit = event => {
     event.preventDefault();
-    setNotes([...notes, { title, body }]);
+    dispatch({ type: addNoteAction, note: { title, body } });
     setTitle("");
     setBody("");
   };
 
   const removeNote = title => {
-    setNotes(notes.filter(note => note.title !== title));
+    dispatch({ type: removeNoteAction, title });
   };
 
   useEffect(() => {
-    const notesData = JSON.parse(localStorage.getItem("notes"));
+    const notes = JSON.parse(localStorage.getItem("notes"));
 
-    if (notesData) {
-      setNotes(notesData);
+    if (notes) {
+      dispatch({ type: populateNotesAction, notes });
     }
   }, []);
 
