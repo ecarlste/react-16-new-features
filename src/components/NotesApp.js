@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import actions from "../actions/actionTypes";
 import notesReducer from "../reducers/notes.reducer";
-import Note from "./Note";
+import NoteList from "./NoteList";
 
 const NotesApp = () => {
   const [notes, dispatch] = useReducer(notesReducer, []);
@@ -41,11 +41,7 @@ const NotesApp = () => {
         <textarea value={body} onChange={e => setBody(e.target.value)} />
         <button>Add Note</button>
       </form>
-      <div>
-        {notes.map(note => (
-          <Note key={note.title} note={note} removeNote={removeNote} />
-        ))}
-      </div>
+      <NoteList notes={notes} removeNote={removeNote} />
     </div>
   );
 };
