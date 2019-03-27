@@ -6,11 +6,11 @@ const NoteList = () => {
   const { notes } = useContext(NotesContext);
 
   return (
-    <div>
+    <>
       {notes.map(note => (
         <Note key={note.title} note={note} />
       ))}
-    </div>
+    </>
   );
 };
 
